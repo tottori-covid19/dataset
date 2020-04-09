@@ -14,3 +14,12 @@
 | -------------- | ------------------------------------------ |
 | inspection.csv | 新型コロナウイルス PCR 検査実施件数        |
 | querent.csv    | 発熱・帰国者・接触者相談センターの相談件数 |
+
+## データセットのダウンロード
+
+```sh
+mkdir -p downloads/tottori
+cd downloads/tottori
+curl -sLO https://raw.githubusercontent.com/tottori-covid19/dataset/master/tottori/inspection.csv
+curl -sLO https://raw.githubusercontent.com/tottori-covid19/dataset/master/tottori/querent.csv
+```
