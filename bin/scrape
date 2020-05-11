@@ -30,7 +30,7 @@ require_relative "../lib/record.rb"
         [k, k == "地区" ? v : v.to_i]
       }.to_h
     }
-  }.then {|h|
+  }.yield_self {|h|
     indexes = h.slice("年", "月", "日")
     [
       ["tottori", "計"],
@@ -39,6 +39,6 @@ require_relative "../lib/record.rb"
       ["tottori-seibu", "西部"],
     ].each {|code, area|
       row = h["table"].find {|r| r["地区"] == area }
-      Record.new("#{code}/inspection.csv", **indexes).save(**row)
+      Record.new("#{code}/inspection.csv", indexes).save(row)
     }
   }

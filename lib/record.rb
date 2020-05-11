@@ -3,7 +3,7 @@ require "csv"
 class Record
   attr_reader :row
 
-  def initialize(filename, **indexes)
+  def initialize(filename, indexes = {})
     @filename = filename
     @indexes = indexes.to_h {|k, v| [k.to_s, v.to_s] }
     @table =
@@ -17,7 +17,7 @@ class Record
     @row = @table.find {|row| @indexes <= row }
   end
 
-  def update(**values)
+  def update(values = {})
     return false if @row.nil?
     h = values.to_h {|k, v| [k.to_s, v.to_s] }
     @row.headers.each {|k|
@@ -26,7 +26,7 @@ class Record
     true
   end
 
-  def create(**values)
+  def create(values = {})
     h = values.to_h {|k, v| [k.to_s, v.to_s] }
     @row = CSV::Row.new(
       @table.headers,
@@ -37,9 +37,9 @@ class Record
     true
   end
 
-  def save(...)
-    if update(...) || create(...)
-      CSV.open(@filename, "w").then {|csv|
+  def save(values = {})
+    if update(values) || create(values)
+      CSV.open(@filename, "w").yield_self {|csv|
         csv << @table.headers
         @table.each {|row| csv << row }
         csv.close
