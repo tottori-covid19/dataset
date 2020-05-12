@@ -5,7 +5,7 @@ class Record
 
   def initialize(filename, indexes = {})
     @filename = filename
-    @indexes = indexes.to_h {|k, v| [k.to_s, v.to_s] }
+    @indexes = indexes.map {|k, v| [k.to_s, v.to_s] }.to_h
     @table =
       if FileTest.exist?(filename)
         CSV.read(filename, headers: true)
@@ -19,7 +19,7 @@ class Record
 
   def update(values = {})
     return false if @row.nil?
-    h = values.to_h {|k, v| [k.to_s, v.to_s] }
+    h = values.map {|k, v| [k.to_s, v.to_s] }.to_h
     @row.headers.each {|k|
       h.key?(k) && @row[k] = h[k]
     }
@@ -27,7 +27,7 @@ class Record
   end
 
   def create(values = {})
-    h = values.to_h {|k, v| [k.to_s, v.to_s] }
+    h = values.map {|k, v| [k.to_s, v.to_s] }.to_h
     @row = CSV::Row.new(
       @table.headers,
       @table.headers.map {|k|

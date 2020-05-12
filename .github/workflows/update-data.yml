@@ -1,8 +1,6 @@
 name: update-data
 on:
-  push:
-    branches: [dummy-update-data]
-  # schedule: [{ cron: "*/15 5-14 * * *" }] # 14-23 Asia/Tokyo UTC+9
+  schedule: [{ cron: "*/15 5-14 * * *" }] # 14-23 Asia/Tokyo UTC+9
 jobs:
   main:
     runs-on: ubuntu-latest
