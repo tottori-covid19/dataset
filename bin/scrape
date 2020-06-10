@@ -15,20 +15,25 @@ require_relative "../lib/record.rb"
     \n地区\s+検査件数\s+結果
     \n\s+陰性\s+陽性\s+検査中
     \n(?<table>
-      (?:\n?(?:計|東部|中部|西部)\s.*)+
+      (?:.*\n)+
+      計\s.*
     )
   /x).named_captures.tap {|h|
     %w[年 月 日].each {|k| h[k] = h[k].to_i }
-    h["table"] = h["table"].split("\n").map {|row|
-      row.match(/
-        (?<地区>計|\p{L}+)\s+
-        (?<検査件数>\S*)\s+
-        (?<陰性>\S*)\s+
-        (?<陽性>\S*)\s+
-        (?<検査中>\S*)
-      /x).named_captures.map {|k, v|
-        [k, k == "地区" ? v : v.to_i]
-      }.to_h
+    h["table"] = h["table"].split("\n").flat_map {|row|
+      if row.empty?
+        []
+      else
+        [row.match(/
+          (?<地区>計|\p{L}+)\s+
+          (?<検査件数>\S*)\s+
+          (?<陰性>\S*)\s+
+          (?<陽性>\S*)\s+
+          (?<検査中>\S*)
+        /x).named_captures.map {|k, v|
+          [k, k == "地区" ? v : v.to_i]
+        }.to_h]
+      end
     }
   }.yield_self {|h|
     indexes = h.slice("年", "月", "日")
