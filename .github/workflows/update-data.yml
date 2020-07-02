@@ -11,5 +11,5 @@ jobs:
         run: echo "::set-output name=mod::$(git status --porcelain)"
       - if: steps.git_status.outputs.mod != ''
         run: |
-          git -c "user.name=${GITHUB_ACTOR}" -c "user.email=${GITHUB_ACTOR}@users.noreply.github.com" commit -a -m update-data \
+          git -c "user.name=bot" -c "user.email=bot@example" commit -a -m update-data \
           && git push origin HEAD
