@@ -8,9 +8,9 @@ require_relative "../lib/record.rb"
 `w3m -dump https://www.pref.tottori.lg.jp/289682.htm`
   .unicode_normalize(:nfkc)
   .match(/
-    \n(?<年>\d+)年(?<月>\d+)月(?<日>\d+)日のPCR検査状況・相談件数・入院病床数\p{^L}
+    \n(?<年>\d+)年(?<月>\d+)月(?<日>\d+)日の新型コロナ検査状況・相談件数・入院病床数\p{^L}
     (?:\n?.*)+?
-    \n.*\p{^L}PCR検査状況\p{^L}.*
+    \n.*\p{^L}検査状況\p{^L}.*
     \n*
     \n地区\s+検査件数\s+結果
     \n\s+陰性\s+陽性\s+検査中
