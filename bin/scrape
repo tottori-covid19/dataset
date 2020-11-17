@@ -8,13 +8,14 @@ require_relative "../lib/record.rb"
 `w3m -dump https://www.pref.tottori.lg.jp/289682.htm`
   .unicode_normalize(:nfkc)
   .match(/
-    \n(?<年>\d+)年(?<月>\d+)月(?<日>\d+)日の新型コロナ検査状況\p{^L}.*
+    \n(?<年>\d+)年(?<月>\d+)月(?<日>\d+)日の検査状況\p{^L}.*
     (?:\n?.*)+?
-    \n地区\s+検査件数\s+結果
+    \n検査件数\s+結果
+    \n総計
     \n\s+陰性\s+陽性\s+検査中
     \n(?<table>
-      (?:.*\n)+
-      計\s.*
+      \n
+      (?:.*\n)
     )
   /x).named_captures.tap {|h|
     %w[年 月 日].each {|k| h[k] = h[k].to_i }
@@ -23,25 +24,18 @@ require_relative "../lib/record.rb"
         []
       else
         [row.match(/
-          (?<地区>計|\p{L}+)\s+
           (?<検査件数>\S*)\s+
           (?<陰性>\S*)\s+
           (?<陽性>\S*)\s+
           (?<検査中>\S*)
         /x).named_captures.map {|k, v|
-          [k, k == "地区" ? v : v.to_i]
+          [k, v.to_i]
         }.to_h]
       end
     }
   }.yield_self {|h|
     indexes = h.slice("年", "月", "日")
-    [
-      ["tottori", "計"],
-      ["tottori-tobu", "東部"],
-      ["tottori-chubu", "中部"],
-      ["tottori-seibu", "西部"],
-    ].each {|code, area|
-      row = h["table"].find {|r| r["地区"] == area }
-      Record.new("#{code}/inspection.csv", indexes).save(row)
-    }
+    code = "tottori"
+    row = h["table"].first
+    Record.new("#{code}/inspection.csv", indexes).save(row)
   }
