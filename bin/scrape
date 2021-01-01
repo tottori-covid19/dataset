@@ -10,11 +10,9 @@ require_relative "../lib/record.rb"
   .match(/
     \n(?<年>\d+)年(?<月>\d+)月(?<日>\d+)日の検査状況\p{^L}.*
     (?:\n?.*)+?
-    \n検査件数\s+結果
-    \n総計
+    \n項目\s+検査件数\s+結果
     \n\s+陰性\s+陽性\s+検査中
     \n(?<table>
-      \n
       (?:.*\n)
     )
   /x).named_captures.tap {|h|
@@ -24,6 +22,7 @@ require_relative "../lib/record.rb"
         []
       else
         [row.match(/
+          (?:本日の検査件数)\s+
           (?<検査件数>\S*)\s+
           (?<陰性>\S*)\s+
           (?<陽性>\S*)\s+
