@@ -22,7 +22,7 @@ require_relative "../lib/record.rb"
         []
       else
         [row.match(/
-          (?:本日の検査件数)\s+
+          (?:検査件数)\s+
           (?<検査件数>\S*)\s+
           (?<陰性>\S*)\s+
           (?<陽性>\S*)\s+
