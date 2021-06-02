@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 # 鳥取県の最新のPCR検査状況を取得します
+# FIXME: 2021年5月31日の鳥取県の発表方法の見直し以降サポートされていません
 # Usage: ruby scrape
 # Required: w3m
 
